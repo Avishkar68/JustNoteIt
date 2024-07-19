@@ -27,7 +27,7 @@ const Login = () => {
             const response = await axiosInstance.post('/login', {
                 email: email,
                 password: password,
-            });
+            }, { withCredentials: true });
 
             if (response.data && response.data.accessToken) {
                 localStorage.setItem('token', response.data.accessToken); // Store token in localStorage
