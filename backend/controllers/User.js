@@ -70,33 +70,41 @@ exports.getUser = async (req, res) => {
 };
 
 
+
 exports.loginUser = async (req, res) => {
-  console.log("Received login request:", req.body);
-  const { email, password } = req.body;
+    console.log("Received login request:", req.body);
+    const { email, password } = req.body;
 
-  if (!email) {
-      return res.status(400).json({ message: "Email is required" });
-  }
-  if (!password) {
-      return res.status(400).json({ message: "Password is required" });
-  }
+    try {
+        if (!email || !password) {
+            return res.status(400).json({ error: true, message: "Email and password are required" });
+        }
 
-  const userInfo = await User.findOne({ email });
+        const userInfo = await User.findOne({ email });
 
-  if (!userInfo) {
-      return res.status(400).json({ message: "User not found" });
-  }
+        if (!userInfo) {
+            return res.status(400).json({ error: true, message: "User not found" });
+        }
 
-  const isMatch = await bcrypt.compare(password, userInfo.password);
+        const isMatch = await bcrypt.compare(password, userInfo.password);
 
-  if (isMatch) {
-      const user = { user: userInfo._id };
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+        if (isMatch) {
+            const user = { user: userInfo._id };
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
 
-      res.cookie('token', accessToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+            // Set cookie with the token
+            res.cookie('token', accessToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 3600000, // 1 hour in milliseconds
+            });
 
-      return res.json({ error: false, message: "Login successful", email, accessToken });
-  } else {
-      return res.status(400).json({ error: true, message: "Invalid credentials" });
-  }
+            return res.json({ error: false, message: "Login successful", email, accessToken });
+        } else {
+            return res.status(400).json({ error: true, message: "Invalid credentials" });
+        }
+    } catch (error) {
+        console.error("Error logging in:", error);
+        res.status(500).json({ error: true, message: "Internal server error" });
+    }
 };
