@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: 'https://just-note-it-39vm.vercel.app', // Replace with your frontend's origin
+    origin: 'https://just-note-it-39vm.vercel.app/', // Replace with your frontend's origin
     credentials: true, // Enable credentials (cookies, authorization headers, etc.)
 };
 app.use(cors(corsOptions));
