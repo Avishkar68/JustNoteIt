@@ -1,2 +1,2 @@
 
-export const BASE_URL = "just-note-it.vercel.app"
+export const BASE_URL = "https://justnoteit.onrender.com"
