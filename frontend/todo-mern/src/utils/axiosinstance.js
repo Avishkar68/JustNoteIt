@@ -10,17 +10,17 @@ const axiosInstance = axios.create({
     withCredentials: true, // Include credentials in the requests
 });
 
-// axiosInstance.interceptors.request.use(
-//     (config) => {
-//         const accessToken = localStorage.getItem('token'); // Get token from localStorage
-//         if (accessToken) {
-//             config.headers.Authorization = `Bearer ${accessToken}`; // Set the Authorization header
-//         }
-//         return config;
-//     },
-//     (error) => {
-//         return Promise.reject(error);
-//     }
-// );
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const accessToken = localStorage.getItem('token'); // Get token from localStorage
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`; // Set the Authorization header
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }   
+);
 
 export default axiosInstance;
