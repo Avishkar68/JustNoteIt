@@ -24,6 +24,7 @@ const User = require('../backend/models/user.model');
 exports.authenticateToken = async (req, res, next) => {
     try {
         const token = req.cookies.token; // Get the token from cookies
+        console.log("your token is: " + token);
         const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
 
         if (!token) {
@@ -32,6 +33,7 @@ exports.authenticateToken = async (req, res, next) => {
 
         jwt.verify(token, ACCESS_TOKEN_SECRET, async (err, decoded) => {
             if (err) {
+                console.log("erro is: " + err.message)
                 return res.status(401).json({ error: true, message: 'Invalid or expired token' });
             }
 
