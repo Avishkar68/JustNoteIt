@@ -23,6 +23,7 @@ const User = require('../backend/models/user.model');
 
 exports.authenticateToken = async (req, res, next) => {
     try {
+        console.log("token object" + req.cookies)
         const token = req.cookies.token; // Get the token from cookies
         console.log("your token is: " + token);
         const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
