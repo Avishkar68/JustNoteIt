@@ -24,6 +24,7 @@ const User = require('../backend/models/user.model');
 exports.authenticateToken = async (req, res, next) => {
     try {
         const token = req.cookies.token; // Get the token from cookies
+        const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
 
         if (!token) {
             return res.status(401).json({ error: true, message: 'Please login first' });
