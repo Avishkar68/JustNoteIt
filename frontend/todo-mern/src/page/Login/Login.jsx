@@ -13,6 +13,8 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        
+        // Client-side validation
         if (!validateEmail(email)) {
             setError('Please enter a valid email address');
             return;
@@ -21,23 +23,25 @@ const Login = () => {
             setError('Please enter the password');
             return;
         }
-        setError('');
-        //Login Api Call
+
+        setError(''); // Clear previous errors
+
+        // Login API Call
         try {
             const response = await axiosInstance.post('/login', {
-                email: email,
-                password: password,
+                email,
+                password,
             }, { withCredentials: true });
 
             if (response.data && response.data.accessToken) {
                 localStorage.setItem('token', response.data.accessToken); // Store token in localStorage
-                navigate('/dashboard');
+                navigate('/dashboard'); // Redirect to dashboard
             }
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
-                setError(error.response.data.message);
+                setError(error.response.data.message); // Display server-side error
             } else {
-                setError('An unexpected error occurred. Please try again.');
+                setError('An unexpected error occurred. Please try again.'); // Display generic error
             }
         }
     };
